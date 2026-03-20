@@ -4,6 +4,7 @@ import { sendEmailToProfessor } from '$lib/server/mailer';
 import fs from 'fs';
 import path from 'path';
 import { broadcastUpdate } from '$lib/server/report-stream';
+import cloudinary from '$lib/server/cloudinary';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
   try {
