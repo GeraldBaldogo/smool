@@ -45,6 +45,7 @@
 			approved: number | string;
 			in_progress: number | string;
 			completed: number | string;
+			submitted_to_admin: number | string;
 		};
 	};
 
@@ -59,6 +60,7 @@
 	let denied = 0;
 	let inProgress = 0;
 	let completed = 0;
+	let professorReports = 0;
 
 	$: {
 		total = Number(stats?.total_reports ?? 0);
@@ -67,6 +69,7 @@
 		approved = Number(stats?.approved ?? 0);
 		inProgress = Number(stats?.in_progress ?? 0);
 		completed = Number(stats?.completed ?? 0);
+		professorReports = Number(stats?.submitted_to_admin ?? 0);
 	}
 
 	let monthlyChart: Chart;
@@ -204,7 +207,7 @@
 		<p class="text-slate-500 text-sm">System-wide maintenance overview</p>
 	</div>
 
-	<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6 gap-6">
+	<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-7 gap-6">
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
 			<p class="text-sm text-slate-500">Total Reports</p>
 			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{total}</p>
@@ -233,6 +236,11 @@
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
 			<p class="text-sm text-slate-500">Completed</p>
 			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{completed}</p>
+		</div>
+
+		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
+			<p class="text-sm text-slate-500">Professor Reports</p>
+			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{professorReports}</p>
 		</div>
 	</section>
 
