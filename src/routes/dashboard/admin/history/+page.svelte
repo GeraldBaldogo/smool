@@ -30,6 +30,7 @@
 	function getStatusLabel(status: string) {
 		const s = getStatusKey(status);
 
+		if (s === 'submitted to admin') return 'Professor Report';
 		if (s === 'pending') return 'Pending';
 		if (s === 'approved') return 'Approved';
 		if (s === 'denied') return 'Denied';
@@ -42,6 +43,7 @@
 	function getStatusClasses(status: string) {
 		const s = getStatusKey(status);
 
+		if (s === 'submitted to admin') return 'bg-violet-100 text-violet-700';
 		if (s === 'pending') return 'bg-yellow-100 text-yellow-700';
 		if (s === 'approved') return 'bg-green-100 text-green-700';
 		if (s === 'denied') return 'bg-red-100 text-red-700';
@@ -141,6 +143,7 @@
 				class="w-full rounded-xl border border-slate-400 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
 			>
 				<option value="all">All Status</option>
+				<option value="submitted to admin">Professor Report</option>
 				<option value="pending">Pending</option>
 				<option value="approved">Approved</option>
 				<option value="denied">Denied</option>
@@ -187,7 +190,16 @@
 									<span
 										class="flex items-center gap-1 px-3 py-1 text-sm font-bold rounded-lg border border-slate-400 {getStatusClasses(r.status)}"
 									>
-										{#if getStatusKey(r.status) === 'pending'}
+										{#if getStatusKey(r.status) === 'submitted to admin'}
+											<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="2"
+													d="M14 5l7 7m0 0l-7 7m7-7H3"
+												/>
+											</svg>
+										{:else if getStatusKey(r.status) === 'pending'}
 											<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 												<path
 													stroke-linecap="round"

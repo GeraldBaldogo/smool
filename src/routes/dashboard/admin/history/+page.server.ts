@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			FROM maintenance_requests mr
 			JOIN users u ON u.id = mr.user_id
 			LEFT JOIN departments d ON d.id = u.department_id
-			WHERE TRIM(LOWER(mr.status)) IN ('pending', 'approved', 'denied', 'in progress', 'completed')
+			WHERE TRIM(LOWER(mr.status)) IN ('submitted to admin', 'pending', 'approved', 'denied', 'in progress', 'completed')
 			ORDER BY COALESCE(mr.completed_at, mr.created_at) DESC
 		`);
 
