@@ -1,13 +1,17 @@
 import type { Actions, PageServerLoad } from './$types';
 import { pool } from '$lib/server/db';
 import { error, fail } from '@sveltejs/kit';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
-import { randomUUID } from 'crypto';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 export const load: PageServerLoad = async ({ params }) => {
-    const result = await pool.query(
-        `
+	const result = await pool.query(
+		`
         SELECT
             mr.id,
             u.full_name AS name,
@@ -25,136 +29,146 @@ export const load: PageServerLoad = async ({ params }) => {
         WHERE mr.id = $1
         LIMIT 1
         `,
-        [params.id]
-    );
-
-    const report = result.rows[0];
-
-    if (!report) {
-        throw error(404, 'Report not found');
-    }
-
-    return {
-        report
-    };
-};
-
-function sanitizeFileName(name: string) {
-    return name.replace(/[^a-zA-Z0-9._-]/g, '_');
-}
-
-export const actions: Actions = {
-    markInProgress: async ({ params }) => {
-	const check = await pool.query(
-		`
-		SELECT id, status
-		FROM maintenance_requests
-		WHERE id = $1
-		LIMIT 1
-		`,
 		[params.id]
 	);
 
-	const report = check.rows[0];
+	const report = result.rows[0];
 
 	if (!report) {
-		return fail(404, { success: false, message: 'Report not found.' });
+		throw error(404, 'Report not found');
 	}
-
-	const currentStatus = String(report.status).trim().toLowerCase();
-
-	if (currentStatus !== 'approved' && currentStatus !== 'submitted to admin') {
-		return fail(400, {
-			success: false,
-			message: 'Only approved reports and professor reports can be marked as In Progress.'
-		});
-	}
-
-	await pool.query(
-		`
-		UPDATE maintenance_requests
-		SET status = 'In Progress'
-		WHERE id = $1
-		`,
-		[params.id]
-	);
 
 	return {
-		success: true,
-		message: 'Report marked as In Progress.'
+		report
 	};
-},
+};
 
-    markCompleted: async ({ request, params }) => {
-        const formData = await request.formData();
-        const feedback = String(formData.get('feedback') ?? '').trim();
-        const completedAt = String(formData.get('completed_at') ?? '').trim();
-        const photo = formData.get('photo');
+export const actions: Actions = {
+	markInProgress: async ({ params }) => {
+		const check = await pool.query(
+			`
+			SELECT id, status
+			FROM maintenance_requests
+			WHERE id = $1
+			LIMIT 1
+			`,
+			[params.id]
+		);
 
-        const check = await pool.query(
-            `
-            SELECT id, status
-            FROM maintenance_requests
-            WHERE id = $1
-            LIMIT 1
-            `,
-            [params.id]
-        );
+		const report = check.rows[0];
 
-        const report = check.rows[0];
+		if (!report) {
+			return fail(404, { success: false, message: 'Report not found.' });
+		}
 
-        if (!report) {
-            return fail(404, {
-                success: false,
-                message: 'Report not found.'
-            });
-        }
+		const currentStatus = String(report.status).trim().toLowerCase();
 
-        const currentStatus = String(report.status).trim().toLowerCase();
+		if (currentStatus !== 'approved' && currentStatus !== 'submitted to admin') {
+			return fail(400, {
+				success: false,
+				message: 'Only approved reports and professor reports can be marked as In Progress.'
+			});
+		}
 
-        if (currentStatus !== 'in progress') {
-            return fail(400, {
-                success: false,
-                message: 'Only In Progress reports can be marked as Completed.'
-            });
-        }
+		await pool.query(
+			`
+			UPDATE maintenance_requests
+			SET status = 'In Progress'
+			WHERE id = $1
+			`,
+			[params.id]
+		);
 
-        let completionPhotoUrl: string | null = null;
+		return {
+			success: true,
+			message: 'Report marked as In Progress.'
+		};
+	},
 
-        if (photo instanceof File && photo.size > 0) {
-            const uploadsDir = path.resolve('static/uploads');
-            await mkdir(uploadsDir, { recursive: true });
+	markCompleted: async ({ request, params }) => {
+		try {
+			const formData = await request.formData();
+			const feedback = String(formData.get('feedback') ?? '').trim();
+			const completedAt = String(formData.get('completed_at') ?? '').trim();
+			const photo = formData.get('photo');
 
-            const safeName = sanitizeFileName(photo.name);
-            const finalFileName = `${randomUUID()}-${safeName}`;
-            const filePath = path.join(uploadsDir, finalFileName);
+			const check = await pool.query(
+				`
+				SELECT id, status
+				FROM maintenance_requests
+				WHERE id = $1
+				LIMIT 1
+				`,
+				[params.id]
+			);
 
-            const arrayBuffer = await photo.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
+			const report = check.rows[0];
 
-            await writeFile(filePath, buffer);
+			if (!report) {
+				return fail(404, {
+					success: false,
+					message: 'Report not found.'
+				});
+			}
 
-            completionPhotoUrl = `/uploads/${finalFileName}`;
-        }
+			const currentStatus = String(report.status).trim().toLowerCase();
 
-        await pool.query(
-            `
-            UPDATE maintenance_requests
-            SET
-                status = 'Completed',
-                admin_feedback = $2,
-                completed_at = CASE
-                    WHEN $3 = '' THEN NOW()
-                    ELSE $3::timestamp
-                END,
-                completion_photo_url = $4
-            WHERE id = $1
-            `,
-            [params.id, feedback || null, completedAt, completionPhotoUrl]
-        );
-        return {
-            success: true,
-            message: 'Report marked as Completed.'
-        };
-    }
+			if (currentStatus !== 'in progress') {
+				return fail(400, {
+					success: false,
+					message: 'Only In Progress reports can be marked as Completed.'
+				});
+			}
+
+			let completionPhotoUrl: string | null = null;
+
+			if (photo instanceof File && photo.size > 0) {
+				const arrayBuffer = await photo.arrayBuffer();
+				const buffer = Buffer.from(arrayBuffer);
+
+				const uploadResult = await new Promise<any>((resolve, reject) => {
+					cloudinary.uploader
+						.upload_stream(
+							{
+								folder: 'maintenance_reports'
+							},
+							(error, result) => {
+								if (error) reject(error);
+								else resolve(result);
+							}
+						)
+						.end(buffer);
+				});
+
+				completionPhotoUrl = uploadResult.secure_url;
+			}
+
+			await pool.query(
+				`
+				UPDATE maintenance_requests
+				SET
+					status = 'Completed',
+					admin_feedback = $2,
+					completed_at = CASE
+						WHEN $3 = '' THEN NOW()
+						ELSE $3::timestamp
+					END,
+					completion_photo_url = $4
+				WHERE id = $1
+				`,
+				[params.id, feedback || null, completedAt, completionPhotoUrl]
+			);
+
+			return {
+				success: true,
+				message: 'Report marked as Completed.'
+			};
+		} catch (err) {
+			console.error('markCompleted error:', err);
+			return fail(500, {
+				success: false,
+				message: 'Something went wrong while marking the report as completed.'
+			});
+		}
+	}
 };
