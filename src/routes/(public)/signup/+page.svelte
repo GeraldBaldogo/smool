@@ -1,91 +1,99 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-    let username = '';
-    let email = '';
-    let password = '';
-    let confirmPassword = '';
-    let role = 'student';
+	let username = '';
+	let email = '';
+	let password = '';
+	let confirmPassword = '';
+	let role = 'student';
 
-    let departments: { id: string; name: string }[] = [];
-    let department_id = '';
-    let error = '';
-    let adminExists = false;
+	let departments: { id: string; name: string }[] = [];
+	let department_id = '';
+	let error = '';
+	let adminExists = false;
 
-    onMount(async () => {
-        try {
-            const deptRes = await fetch("http://localhost:3000/api/departments");
-            departments = await deptRes.json();
+	onMount(async () => {
+		try {
+			const deptRes = await fetch('/api/departments');
+			if (!deptRes.ok) {
+				throw new Error('Failed to fetch departments');
+			}
+			departments = await deptRes.json();
 
-            const adminRes = await fetch("http://localhost:3000/api/auth/admin-exists");
-            const adminData = await adminRes.json();
-            adminExists = adminData.exists;
+			const adminRes = await fetch('/api/auth/admin-exists');
+			if (!adminRes.ok) {
+				throw new Error('Failed to fetch admin status');
+			}
+			const adminData = await adminRes.json();
+			adminExists = adminData.exists;
 
-            if (adminExists && role === 'admin') {
-                role = 'student';
-            }
-        } catch (err) {
-            console.error("Failed to load departments or admin status");
-        }
-    });
+			if (adminExists && role === 'admin') {
+				role = 'student';
+			}
+		} catch (err) {
+			console.error('Failed to load departments or admin status:', err);
+			error = 'Failed to load departments';
+		}
+	});
 
-    async function handleSignup() {
-        error = '';
+	async function handleSignup() {
+		error = '';
 
-        if (!username || !email || !password || !confirmPassword) {
-            error = "All fields are required";
-            return;
-        }
+		if (!username || !email || !password || !confirmPassword) {
+			error = 'All fields are required';
+			return;
+		}
 
-        if (password !== confirmPassword) {
-            error = "Passwords do not match";
-            return;
-        }
+		if (password !== confirmPassword) {
+			error = 'Passwords do not match';
+			return;
+		}
 
-        if (role === "admin" && adminExists) {
-            error = "An admin account already exists. Only one admin is allowed.";
-            return;
-        }
+		if (role === 'admin' && adminExists) {
+			error = 'An admin account already exists. Only one admin is allowed.';
+			return;
+		}
 
-        if (role !== "admin" && !department_id) {
-            error = "Please select a department";
-            return;
-        }
+		if (role !== 'admin' && !department_id) {
+			error = 'Please select a department';
+			return;
+		}
 
-        try {
-            const res = await fetch("http://localhost:3000/api/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    full_name: username,
-                    email,
-                    password,
-                    role,
-                    department_id: role === "admin" ? null : department_id
-                })
-            });
+		try {
+			const res = await fetch('/api/auth/signup', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					full_name: username,
+					email,
+					password,
+					role,
+					department_id: role === 'admin' ? null : department_id
+				})
+			});
 
-            const data = await res.json();
+			const data = await res.json();
 
-            if (!res.ok) {
-                error = data.message || "Signup failed";
-                return;
-            }
+			if (!res.ok) {
+				error = data.message || 'Signup failed';
+				return;
+			}
 
-            alert("Signup successful!");
-            error = '';
-            username = '';
-            email = '';
-            password = '';
-            confirmPassword = '';
-            role = adminExists ? 'student' : 'student';
-            department_id = '';
-        } catch (err) {
-            error = "Server error";
-        }
-    }
+			alert('Signup successful!');
+			error = '';
+			username = '';
+			email = '';
+			password = '';
+			confirmPassword = '';
+			role = 'student';
+			department_id = '';
+		} catch (err) {
+			console.error('Signup error:', err);
+			error = 'Server error';
+		}
+	}
 </script>
 
 <div class="min-h-screen flex items-start justify-center bg-animated px-4">
@@ -176,7 +184,7 @@
                         text-slate-900 dark:text-white px-3 py-2 text-sm outline-none
                         focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition"
                     >
-                        <option value="" disabled selected>Select Department</option>
+                        <option value="" disabled>Select Department</option>
                         {#each departments as dept}
                             <option value={dept.id}>{dept.name}</option>
                         {/each}
