@@ -21,6 +21,49 @@ function uploadToCloudinary(buffer: Buffer, folder = 'maintenance-requests') {
   });
 }
 
+function getRoleCode(role: string) {
+  if (role === 'student') return 'STUDENT';
+  if (role === 'professor') return 'PROF';
+  return 'USER';
+}
+
+function getDepartmentCode(departmentName: string) {
+  const normalized = departmentName.trim().toLowerCase();
+
+  const map: Record<string, string> = {
+    'college of computer studies': 'CS',
+    'college of business and accountancy': 'CBA',
+    'college of criminology': 'CRIM',
+    'college of education and liberal arts': 'COELA',
+    'college of hospitality management': 'HM',
+    'college of nursing': 'BSN',
+    'college of physical therapy': 'PT'
+  };
+
+  return map[normalized] || 'GEN';
+}
+
+async function generateReportCode(
+  departmentCode: string,
+  roleCode: string
+) {
+  const year = new Date().getFullYear();
+
+  const countResult = await pool.query(
+    `
+    SELECT COUNT(*)::int AS total
+    FROM maintenance_requests
+    WHERE EXTRACT(YEAR FROM created_at) = $1
+    `,
+    [year]
+  );
+
+  const nextSequence = countResult.rows[0].total + 1;
+  const paddedSequence = String(nextSequence).padStart(2, '0');
+
+  return `${departmentCode}-${roleCode}-${year}-${paddedSequence}`;
+}
+
 export const POST: RequestHandler = async ({ request, locals }) => {
   try {
     const user = locals.user;
@@ -94,6 +137,28 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       });
     }
 
+    const departmentResult = await pool.query(
+      `
+      SELECT name
+      FROM departments
+      WHERE id = $1
+      LIMIT 1
+      `,
+      [departmentId]
+    );
+
+    if (departmentResult.rows.length === 0) {
+      return new Response(JSON.stringify({ error: 'Department not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const departmentName = departmentResult.rows[0].name;
+    const departmentCode = getDepartmentCode(departmentName);
+    const roleCode = getRoleCode(user.role);
+    const reportCode = await generateReportCode(departmentCode, roleCode);
+
     let status = 'Pending';
 
     if (user.role === 'professor' || directToAdmin === 'true') {
@@ -162,30 +227,32 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       INSERT INTO maintenance_requests
       (
         user_id,
+        report_code,
         issue_description,
-        category,
-        subcategory,
+        status,
         latitude,
         longitude,
         address,
         landmark,
         photo_url,
-        status
+        category,
+        subcategory
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
       RETURNING *
       `,
       [
         user.id,
+        reportCode,
         description,
-        category,
-        subcategory,
+        status,
         latitude,
         longitude,
         address,
         landmark,
         photo_url,
-        status
+        category,
+        subcategory
       ]
     );
 
@@ -196,6 +263,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         type: 'report_created',
         report: {
           id: newReport.id,
+          report_code: newReport.report_code,
           name: user.full_name ?? user.email ?? 'Unknown User',
           issue: newReport.subcategory ?? newReport.issue_description,
           date: newReport.created_at ?? new Date().toISOString(),
@@ -218,8 +286,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     if (notifyEmail) {
       const message =
         status === 'Submitted to Admin'
-          ? 'A maintenance request was submitted directly to admin.'
-          : 'A maintenance request is waiting for professor review.';
+          ? `A maintenance request (${reportCode}) was submitted directly to admin.`
+          : `A maintenance request (${reportCode}) is waiting for professor review.`;
 
       try {
         await sendEmailToProfessor(notifyEmail, message);
