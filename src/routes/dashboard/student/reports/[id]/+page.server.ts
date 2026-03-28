@@ -12,6 +12,7 @@ export const load = async ({ params, locals }) => {
     `
     SELECT
       id,
+      report_code,
       issue_description,
       category,
       subcategory,
