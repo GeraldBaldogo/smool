@@ -5,7 +5,8 @@
 	import { goto } from '$app/navigation';
 
 	type Report = {
-		id: number;
+		id: string;
+		report_code?: string | null;
 		name: string;
 		issue: string;
 		date: string;
@@ -170,23 +171,23 @@
 		return () => evtSource.close();
 	});
 
-	async function approve(id: number) {
-		await updateStatus(id, 'Approved');
+	async function approve(id: string) {
+	await updateStatus(id, 'Approved');
 
-		reports.update((rs) =>
-			rs.map((r) => (r.id === id ? { ...r, status: 'Approved' } : r))
-		);
-	}
+	reports.update((rs) =>
+		rs.map((r) => (r.id === id ? { ...r, status: 'Approved' } : r))
+	);
+}
 
-	async function deny(id: number) {
+	async function deny(id: string) {
 		await updateStatus(id, 'Denied');
 
 		reports.update((rs) =>
-			rs.map((r) => (r.id === id ? { ...r, status: 'Denied' } : r))
+		rs.map((r) => (r.id === id ? { ...r, status: 'Denied' } : r))
 		);
 	}
 
-	async function updateStatus(id: number, status: string) {
+	async function updateStatus(id: string, status: string) {
 		try {
 			const res = await fetch('/dashboard/professor/update-status', {
 				method: 'POST',
@@ -195,7 +196,6 @@
 				},
 				body: JSON.stringify({ id, status })
 			});
-
 			const result = await res.json();
 			if (!res.ok) throw new Error(result.error);
 		} catch (err) {
@@ -300,7 +300,7 @@
 									<div>
 										<p class="text-xs text-slate-500">ID</p>
 										<p class="text-sm font-semibold text-gray-700 dark:text-gray-200 break-all">
-											{r.id}
+											{r.report_code ?? r.id}
 										</p>
 									</div>
 
@@ -360,7 +360,7 @@
 									<div>
 										<p class="text-xs text-slate-500">ID</p>
 										<p class="text-sm font-semibold text-gray-700 dark:text-gray-200 break-all">
-											{r.id}
+											{r.report_code ?? r.id}
 										</p>
 									</div>
 
@@ -464,7 +464,7 @@
 								on:click={() => canViewDetails(r.status) && goto(`/dashboard/professor/reports/${r.id}`)}
 							>
 								<td class="p-3 border-y border-l border-slate-400 dark:border-slate-700 rounded-l-2xl font-medium text-sm text-gray-700 dark:text-gray-200">
-									{r.id}
+									{r.report_code ?? r.id}
 								</td>
 
 								<td class="p-3 border-y border-slate-400 dark:border-slate-700 text-sm text-gray-700 dark:text-gray-200">
