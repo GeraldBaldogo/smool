@@ -2,6 +2,7 @@
 	export let data: {
 		report: {
 			id: string;
+			report_code?: string | null;
 			issue_description: string;
 			status: string;
 			created_at: string;
@@ -123,7 +124,7 @@
 				<div>
 					<p class="text-sm text-slate-500">Report ID</p>
 					<p class="text-base font-semibold text-gray-800 dark:text-gray-200 break-all">
-						{report.id}
+						{report.report_code ?? report.id}
 					</p>
 				</div>
 
