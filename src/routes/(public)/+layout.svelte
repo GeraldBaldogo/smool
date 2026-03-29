@@ -51,9 +51,9 @@
 
 <!-- ================= NAVBAR ================= -->
 <nav class="sticky top-0 z-50 border-b border-black/15 backdrop-blur dark:border-white/10">
-	<div class="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6">
+	<div class="mx-auto flex max-w-7xl h-20 items-center justify-between px-4 sm:px-6">
 		<!-- Logo -->
-		<a href="/" class="flex items-center mr-8 sm:mr-6 transition hover:opacity-90">
+		<a href="/" class="flex items-center mr-10 sm:mr-8 transition hover:opacity-90">
 			<img
 				src={smoolLogo}
 				alt="SmOol logo"
