@@ -32,14 +32,29 @@
 	const { user } = data;
 
 	let reports = writable<Report[]>(data.reports);
+	
+	function normalizeStatus(status: string) {
+	const s = status?.toLowerCase().trim();
+		if (
+			s === 'pending' ||
+			s === 'pending professor review' ||
+			s === 'submitted to admin'
+		) {
+			return 'pending';
+		}
+		if (s === 'approved') return 'approved';
+		if (s === 'denied') return 'denied';
+		if (s === 'completed') return 'completed';
+		return s;
+	}
 
 	function calculateStats(reportList: Report[]) {
 		return {
 			total: reportList.length,
-			pending: reportList.filter((r) => r.status?.toLowerCase().trim() === 'pending').length,
-			approved: reportList.filter((r) => r.status?.toLowerCase().trim() === 'approved').length,
-			denied: reportList.filter((r) => r.status?.toLowerCase().trim() === 'denied').length,
-			completed: reportList.filter((r) => r.status?.toLowerCase().trim() === 'completed').length
+			pending: reportList.filter((r) => normalizeStatus(r.status) === 'pending').length,
+			approved: reportList.filter((r) => normalizeStatus(r.status) === 'approved').length,
+			denied: reportList.filter((r) => normalizeStatus(r.status) === 'denied').length,
+			completed: reportList.filter((r) => normalizeStatus(r.status) === 'completed').length
 		};
 	}
 
