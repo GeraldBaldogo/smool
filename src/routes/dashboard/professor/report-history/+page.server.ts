@@ -12,6 +12,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         `
 	SELECT 
 		mr.id,
+        mr.report_code,
 		u.full_name AS name,
 		mr.issue_description AS issue,
 		mr.created_at AS date,
