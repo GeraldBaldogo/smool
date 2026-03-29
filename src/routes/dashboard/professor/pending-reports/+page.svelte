@@ -3,7 +3,8 @@
 	import { goto } from '$app/navigation';
 
 	type Report = {
-		id: number;
+		id: string;
+		report_code?: string | null;
 		name: string;
 		issue: string;
 		date: string;
@@ -14,7 +15,7 @@
 
 	const reports = writable<Report[]>(data.reports);
 
-	async function updateStatus(id: number, status: string) {
+	async function updateStatus(id: string, status: string) {
 		try {
 			const res = await fetch('/dashboard/professor/update-status', {
 				method: 'POST',
@@ -64,7 +65,7 @@
 							<div class="space-y-3">
 								<div>
 									<p class="text-xs text-slate-500">ID</p>
-									<p class="font-medium text-gray-800 dark:text-white break-all">{r.id}</p>
+									<p class="font-medium text-gray-800 dark:text-white break-all">{r.report_code ?? r.id}</p>
 								</div>
 
 								<div>
@@ -127,7 +128,7 @@
 								on:click={() => goto(`/dashboard/professor/reports/${r.id}`)}
 							>
 								<td class="p-3 border-y border-l border-slate-400 dark:border-slate-700 rounded-l-xl font-medium">
-									{r.id}
+									{r.report_code ?? r.id}
 								</td>
 
 								<td class="p-3 border-y border-slate-400 dark:border-slate-700">
