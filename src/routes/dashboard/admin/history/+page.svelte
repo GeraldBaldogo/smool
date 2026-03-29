@@ -4,6 +4,7 @@
 	export let data: {
 		historyReports: {
 			id: string;
+			report_code?: string | null;
 			issue: string;
 			status: string;
 			category?: string | null;
@@ -177,7 +178,7 @@
 							<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
 								<div class="min-w-0">
 									<p class="font-medium break-words">{r.issue}</p>
-									<p class="text-xs text-slate-500 mt-1">Report ID: #{r.id}</p>
+									<p class="text-xs text-slate-500 mt-1">Report ID: {r.report_code ?? r.id}</p>
 									<p class="text-xs text-slate-500 mt-1">
 										Created: {formatDate(r.created_at)}
 									</p>

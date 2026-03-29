@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		const result = await pool.query(`
 			SELECT
 				mr.id,
+				mr.report_code,
 				mr.issue_description AS issue,
 				mr.status,
 				mr.category,
