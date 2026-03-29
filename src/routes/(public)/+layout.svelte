@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import smoolLogo from '$lib/assets/SmOol.png';
+	import smoolLogo from '$lib/assets/SmOol-removebg-preview.png';
 
 	let theme: 'light' | 'dark' = 'light';
 	let mobileMenuOpen = false;
