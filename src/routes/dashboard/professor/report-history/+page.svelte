@@ -3,7 +3,8 @@
 	import { goto } from '$app/navigation';
 
 	type Report = {
-		id: number;
+		id: string;
+		report_code?: string | null;
 		name: string;
 		issue: string;
 		date: string;
@@ -124,7 +125,7 @@
 							<div>
 								<p class="text-xs text-slate-500">ID</p>
 								<p class="text-sm font-semibold text-gray-800 dark:text-white break-all">
-									{r.id}
+									{r.report_code ?? r.id}
 								</p>
 							</div>
 
@@ -175,7 +176,7 @@
 								on:click={() => goto(`/dashboard/professor/reports/${r.id}`)}
 							>
 								<td class="py-4 px-3 border-y border-l border-slate-400 dark:border-slate-700 rounded-l-2xl">
-									<span class="break-all">{r.id}</span>
+									<span class="break-all">{r.report_code ?? r.id}</span>
 								</td>
 
 								<td class="px-3 border-y border-slate-400 dark:border-slate-700">
