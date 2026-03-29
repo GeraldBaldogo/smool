@@ -53,7 +53,7 @@
 <nav class="sticky top-0 z-50 border-b border-black/15 backdrop-blur dark:border-white/10">
 	<div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
 		<!-- Logo -->
-		<a href="/" class="flex items-center transition hover:opacity-90 ml-4 sm:ml-6">
+		<a href="/" class="flex items-center transition hover:opacity-90">
 			<img
 				src={smoolLogo}
 				alt="SmOol logo"
