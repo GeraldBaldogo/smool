@@ -12,6 +12,7 @@
 		};
 		reports: {
 			id: string;
+			report_code?: string | null;
 			issue: string;
 			status: string;
 			category?: string;
@@ -29,6 +30,7 @@
         }[];
 		pendingReports: {
 			id: string;
+			report_code?: string | null;
 			issue: string;
 			status: string;
 			category?: string;
@@ -293,7 +295,7 @@
 								<div class="min-w-0">
 									<p class="font-medium break-words">{r.issue}</p>
 									<p class="text-xs text-slate-500 mt-1">
-										Report ID: #{r.id}
+										Report ID: {r.report_code ?? r.id}
 									</p>
 									<p class="text-xs text-slate-500 mt-1">
 										{new Date(r.created_at).toLocaleDateString('en-US', {
