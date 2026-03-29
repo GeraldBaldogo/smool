@@ -55,7 +55,7 @@
 	}
 
 	function canViewDetails(status: string) {
-		return !isPending(status);
+		return true;
 	}
 
 	function calculateCategoryStats(reportList: Report[]) {
