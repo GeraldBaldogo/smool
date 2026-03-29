@@ -51,13 +51,13 @@
 
 <!-- ================= NAVBAR ================= -->
 <nav class="sticky top-0 z-50 border-b border-black/15 backdrop-blur dark:border-white/10">
-	<div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+	<div class="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6">
 		<!-- Logo -->
-		<a href="/" class="flex items-center ml-4 sm:ml-6 transition hover:opacity-90">
+		<a href="/" class="flex items-center ml-2 sm:ml-6 transition hover:opacity-90">
 			<img
 				src={smoolLogo}
 				alt="SmOol logo"
-				class="h-12 w-auto sm:h-14 md:h-16"
+				class="h-10 w-auto sm:h-12 md:h-12"
 			/>
 		</a>
 
