@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import smoolLogo from '$lib/assets/SmOol.png';
 
 	let theme: 'light' | 'dark' = 'light';
 	let mobileMenuOpen = false;
@@ -52,12 +53,13 @@
 <nav class="sticky top-0 z-50 border-b border-black/15 backdrop-blur dark:border-white/10">
 	<div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
 		<!-- Logo -->
-		<h1 class="max-w-[70%] text-base font-bold leading-tight text-gray-900 dark:text-white sm:text-xl md:max-w-none md:text-2xl">
-			<a href="/" class="transition hover:text-blue-500">
-				<span class="block sm:hidden">Smart School Maintenance</span>
-				<span class="hidden sm:block">Smart School Maintenance</span>
-			</a>
-		</h1>
+		<a href="/" class="flex items-center transition hover:opacity-90">
+			<img
+				src={smoolLogo}
+				alt="SmOol logo"
+				class="h-10 w-auto sm:h-12 md:h-14"
+			/>
+		</a>
 
 		<!-- Desktop Nav Links -->
 		<div class="hidden items-center gap-8 font-medium lg:flex xl:gap-16 text-medium">
