@@ -57,7 +57,7 @@
 			<img
 				src={smoolLogo}
 				alt="SmOol logo"
-				class="h-10 w-auto sm:h-12 md:h-14"
+				class="h-10 w-auto sm:h-12 md:h-14 ml-4 sm:ml-6"
 			/>
 		</a>
 
