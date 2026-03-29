@@ -37,7 +37,7 @@ onMount(() => {
     class:opacity-100={show}
     class:translate-y-0={show}>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
-            Smart Maintenance Reporting
+            Smart School Maintenance Reporting
         </h1>
 
         <p class="max-w-xl text-lg text-gray-600 dark:text-gray-300 mb-8    ">
@@ -75,7 +75,7 @@ onMount(() => {
             <h3 class="text-center text-3xl md:text-4xl font-extrabold mb-16">
                 Why Choose
                 <span class="tumble-text ml-2">
-                    {#each "Smart Maintenance".split("") as char, i}
+                    {#each "Smart School Maintenance".split("") as char, i}
                     <span
                         class="tumble-char"
                         style="animation-delay: {i * 0.12}s"
@@ -144,6 +144,6 @@ onMount(() => {
         <div class="h-px w-5/6 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
     </div>
     <footer class="text-center py-6 text-large text-gray-500 dark:text-gray-400">
-        © {new Date().getFullYear()} Smart Maintenance System. All rights reserved.
+        © {new Date().getFullYear()} Smart School Maintenance. All rights reserved.
     </footer>
 </main>
