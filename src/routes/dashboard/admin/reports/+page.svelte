@@ -4,6 +4,7 @@
 
     type Report = {
         id: string;
+        report_code?: string | null;
         name: string;
         issue: string;
         date: string;
@@ -89,7 +90,7 @@
                         class="border-b border-slate-400 dark:border-white/30 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer"
                         on:click={() => goto(`/dashboard/admin/reports/${r.id}`)}
                     >
-                        <td class="py-3">{r.id}</td>
+                        <td class="py-3">{r.report_code ?? r.id}</td>
                         <td>{r.name}</td>
                         <td>{r.issue}</td>
                         <td>{new Date(r.date).toLocaleDateString()}</td>
