@@ -52,7 +52,7 @@
 				</div>
 
 				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<p class="text-sm text-slate-500">Smart Maintenance</p>
+					<p class="text-sm text-slate-500">Smart School Maintenance</p>
 					<p class="font-semibold text-gray-900 dark:text-white">Student Dashboard</p>
 					<p class="mt-1 text-gray-700 dark:text-gray-300 text-sm">Welcome, {user.full_name}</p>
 				</div>
