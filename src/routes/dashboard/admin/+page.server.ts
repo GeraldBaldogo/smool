@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		const reports = await pool.query(`
 			SELECT 
 				mr.id,
+				mr.report_code,
 				mr.issue_description AS issue,
 				mr.status,
 				mr.created_at,
@@ -30,6 +31,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		const chartReports = await pool.query(`
 			SELECT
 				id,
+				report_code,
 				status,
 				created_at,
 				category
@@ -40,6 +42,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		const pendingReports = await pool.query(`
 			SELECT 
 				mr.id,
+				mr.report_code,
 				mr.issue_description AS issue,
 				mr.status,
 				mr.created_at,
