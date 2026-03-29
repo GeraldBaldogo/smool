@@ -109,7 +109,7 @@
 						Smart School Maintenance Report
 					</p>
 					<h3 class="mt-1 text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 dark:text-white break-all">
-						#{report.id}
+						{report.report_code ?? report.id}
 					</h3>
 				</div>
 
