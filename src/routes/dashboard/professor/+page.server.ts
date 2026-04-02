@@ -16,6 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     const reportsRes = await pool.query(`
       SELECT 
           mr.id,
+          mr.report_code,
           u.full_name AS name,
           d.name AS department,
           mr.issue_description AS issue,
