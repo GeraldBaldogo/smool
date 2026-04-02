@@ -36,11 +36,11 @@ onMount(() => {
     class:translate-y-10={!show}
     class:opacity-100={show}
     class:translate-y-0={show}>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
+        <h1 class="mx-auto max-w-[12ch] sm:max-w-2xl text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Smart School Maintenance Reporting
         </h1>
 
-        <p class="max-w-xl text-lg text-gray-600 dark:text-gray-300 mb-8    ">
+        <p class="mx-auto max-w-xl text-base sm:text-lg leading-7 text-gray-600 dark:text-gray-300 mb-8">
             Report issues, attach photos, and automatically capture location
             for faster maintenance response.
         </p>
@@ -72,19 +72,19 @@ onMount(() => {
         <div class="max-w-5xl mx-auto">
 
             <!-- Section Heading -->
-            <h3 class="text-center text-3xl md:text-4xl font-extrabold mb-16">
-                Why Choose
-                <span class="tumble-text ml-2">
+            <h3 class="mx-auto max-w-xs sm:max-w-2xl text-center text-3xl md:text-4xl font-extrabold leading-tight mb-16">
+                <span class="block">Why Choose</span>
+                <span class="tumble-text block mt-2">
                     {#each "Smart School Maintenance".split("") as char, i}
-                    <span
-                        class="tumble-char"
-                        style="animation-delay: {i * 0.12}s"
+                        <span
+                            class="tumble-char"
+                            style="animation-delay: {i * 0.12}s"
                         >
-                        {char === " " ? "\u00A0" : char}
-                    </span>
+                            {char === " " ? "\u00A0" : char}
+                        </span>
                     {/each}
                 </span>
-                ?
+                <span class="block">?</span>
             </h3>
 
             <!-- VALUE STATS (PLAIN / PROFILE-STYLE) -->
