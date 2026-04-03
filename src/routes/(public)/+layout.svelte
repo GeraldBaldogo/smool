@@ -67,7 +67,7 @@
 				<span class="brand-wordmark brand-wordmark-mobile sm:brand-wordmark-desktop">
 					Sm<span class="brand-accent">O</span>ol
 				</span>
-				<span class="brand-subtitle brand-subtitle-mobile sm:brand-subtitle-desktop">smart school maintenance</span>
+				<span class="brand-subtitle hidden sm:block">smart school maintenance</span>
 			</div>
 		</a>
 
@@ -292,23 +292,6 @@
 :global(body) {
 	font-family: 'Inter', sans-serif;
 }
-
-.brand-subtitle-mobile {
-	display: block;
-	margin-top: 0.08rem;
-	font-size: 0.42rem;
-	letter-spacing: 0.08em;
-	line-height: 1;
-	white-space: nowrap;
-	opacity: 0.9;
-}
-
-.brand-subtitle-desktop {
-	font-size: 0.68rem;
-	letter-spacing: 0.18em;
-	line-height: 1.1;
-}
-
 
 .brand-wordmark-mobile {
 	font-size: 1rem;
