@@ -20,7 +20,7 @@ import {
         </h2>
 
         <p class="text-lg text-gray-600 dark:text-gray-400">
-            Smart Maintenance System provides intelligent reporting, real-time monitoring, and automated workflow processing to ensure efficient issue management.
+            Smart School Maintenance provides intelligent reporting, real-time monitoring, and automated workflow processing to ensure efficient issue management.
         </p>
     </div>
 
