@@ -4,7 +4,9 @@ import {
     MapPin,
     Zap
 } from "lucide-svelte";
-import { onMount } from 'svelte';
+import {
+    onMount
+} from 'svelte';
 
 let show = false;
 
@@ -13,13 +15,13 @@ onMount(() => {
 });
 </script>
 
-<main class="relative min-h-screen overflow-hidden text-gray-900 dark:text-gray-100 
+<main class="relative min-h-screen overflow-hidden text-gray-900 dark:text-gray-100
     transition-all duration-900 ease-in-out"
     class:opacity-0={!show}
     class:translate-y-10={!show}
     class:opacity-100={show}
     class:translate-y-0={show}
->
+    >
 
     <!-- Animated Background -->
     <div class="absolute inset-0 -z-10 bg-animated"></div>
@@ -31,11 +33,11 @@ onMount(() => {
 
     <!-- Hero Section -->
     <section class="flex flex-col items-center justify-center text-center px-6 py-20 md:py-32
-    transition-all duration-700 delay-400"
-    class:opacity-0={!show}
-    class:translate-y-10={!show}
-    class:opacity-100={show}
-    class:translate-y-0={show}>
+        transition-all duration-700 delay-400"
+        class:opacity-0={!show}
+        class:translate-y-10={!show}
+        class:opacity-100={show}
+        class:translate-y-0={show}>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
             Smart School Maintenance Reporting
         </h1>
@@ -64,32 +66,41 @@ onMount(() => {
 
     <!-- WHY CHOOSE SMART MAINTENANCE -->
     <section class="px-6 pb-20 pt-0
-    transition-all duration-700"
-    class:opacity-0={!show}
-    class:translate-y-10={!show}
-    class:opacity-100={show}
-    class:translate-y-0={show}>
+        transition-all duration-700"
+        class:opacity-0={!show}
+        class:translate-y-10={!show}
+        class:opacity-100={show}
+        class:translate-y-0={show}>
         <div class="max-w-5xl mx-auto">
 
             <!-- Section Heading -->
-            <h3 class="text-center text-3xl md:text-4xl font-extrabold leading-tight mb-16">
-	<span class="block">Why Choose</span>
+            <h3 class="mx-auto max-w-xs text-center text-3xl md:max-w-2xl md:text-4xl font-extrabold leading-tight mb-16">
+                <span class="block">Why Choose</span>
 
-	<span class="block text-blue-500">
-		<span class="tumble-text">
-			{#each "Smart School Maintenance".split("") as char, i}
-				<span
-					class="tumble-char"
-					style="animation-delay: {i * 0.12}s"
-				>
-					{char === " " ? "\u00A0" : char}
-				</span>
-			{/each}
-		</span>
-		<span class="inline-block ml-1">?</span>
-	</span>
-</h3>
+                <span class="tumble-text block text-blue-500">
+                    {#each "Smart School".split("") as char, i}
+                    <span
+                        class="tumble-char"
+                        style="animation-delay: {i * 0.12}s"
+                        >
+                        {char === " " ? "\u00A0" : char}
+                    </span>
+                    {/each}
+                </span>
 
+                <span class="tumble-text block text-blue-500">
+                    {#each "Maintenance".split("") as char, i}
+                    <span
+                        class="tumble-char"
+                        style="animation-delay: {(i + 12) * 0.12}s"
+                        >
+                        {char}
+                    </span>
+                    {/each}
+                </span>
+
+                <span class="block">?</span>
+            </h3>
             <!-- VALUE STATS (PLAIN / PROFILE-STYLE) -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center sm:text-left">
 
