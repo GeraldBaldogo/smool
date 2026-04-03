@@ -75,29 +75,19 @@ onMount(() => {
             <h3 class="text-center text-3xl md:text-4xl font-extrabold leading-tight mb-16">
 	<span class="block">Why Choose</span>
 
-	<span class="tumble-text block text-blue-500">
-		{#each "Smart School".split("") as char, i}
-			<span
-				class="tumble-char"
-				style="animation-delay: {i * 0.12}s"
-			>
-				{char === " " ? "\u00A0" : char}
-			</span>
-		{/each}
+	<span class="block text-blue-500">
+		<span class="tumble-text">
+			{#each "Smart School Maintenance".split("") as char, i}
+				<span
+					class="tumble-char"
+					style="animation-delay: {i * 0.12}s"
+				>
+					{char === " " ? "\u00A0" : char}
+				</span>
+			{/each}
+		</span>
+		<span class="inline-block ml-1">?</span>
 	</span>
-
-	<span class="tumble-text block text-blue-500">
-		{#each "Maintenance".split("") as char, i}
-			<span
-				class="tumble-char"
-				style="animation-delay: {(i + 12) * 0.12}s"
-			>
-				{char}
-			</span>
-		{/each}
-	</span>
-
-	<span class="block">?</span>
 </h3>
 
             <!-- VALUE STATS (PLAIN / PROFILE-STYLE) -->
