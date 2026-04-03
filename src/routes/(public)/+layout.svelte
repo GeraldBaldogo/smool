@@ -53,12 +53,20 @@
 <nav class="sticky top-0 z-50 border-b border-black/15 backdrop-blur dark:border-white/10">
 	<div class="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6">
 		<!-- Logo -->
-		<a href="/" class="flex items-center mr-10 sm:mr-8 transition hover:opacity-90">
+		<a
+			href="/"
+			class="mr-6 flex items-center gap-3 sm:mr-8 transition hover:opacity-90"
+		>
 			<img
 				src={smoolLogo}
 				alt="SmOol logo"
 				class="h-10 w-auto sm:h-12 md:h-12"
 			/>
+
+			<div class="hidden sm:flex flex-col leading-none">
+				<span class="brand-wordmark">Sm<span class="brand-accent">O</span>ol</span>
+				<span class="brand-subtitle">smart maintenance</span>
+			</div>
 		</a>
 
 		<!-- Desktop Nav Links -->
@@ -277,6 +285,43 @@
 <slot />
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:global(body) {
+	font-family: 'Inter', sans-serif;
+}
+
+.brand-wordmark {
+	font-family: 'Baloo 2', cursive;
+	font-size: 1.75rem;
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	line-height: 0.9;
+	background: linear-gradient(90deg, #60a5fa 0%, #22c55e 45%, #a78bfa 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	text-shadow: 0 0 18px rgba(96, 165, 250, 0.18);
+}
+
+.brand-accent {
+	display: inline-block;
+	transform: translateY(-1px) rotate(-6deg);
+	color: transparent;
+}
+
+.brand-subtitle {
+	margin-top: 0.15rem;
+	font-size: 0.68rem;
+	font-weight: 600;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.65);
+}
+
+:global(html:not(.dark)) .brand-subtitle {
+	color: rgba(15, 23, 42, 0.58);
+}
 	/* 🌌 Animated Gradient Background */
 	.bg-animated {
 		background: linear-gradient(120deg, #0f172a, #020617, #1e293b, #020617);
