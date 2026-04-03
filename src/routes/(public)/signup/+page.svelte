@@ -122,7 +122,7 @@ async function handleSignup() {
         "
         >
         <h1 class="text-2xl font-bold text-center">
-            Smart Maintenance
+            Smart School Maintenance
         </h1>
 
         <p class="text-sm text-center text-slate-600 dark:text-slate-400 mb-6">
