@@ -36,11 +36,11 @@ onMount(() => {
     class:translate-y-10={!show}
     class:opacity-100={show}
     class:translate-y-0={show}>
-        <h1 class="mx-auto max-w-[12ch] sm:max-w-2xl text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
             Smart School Maintenance Reporting
         </h1>
 
-        <p class="mx-auto max-w-xl text-base sm:text-lg leading-7 text-gray-600 dark:text-gray-300 mb-8">
+        <p class="max-w-xl text-lg text-gray-600 dark:text-gray-300 mb-8    ">
             Report issues, attach photos, and automatically capture location
             for faster maintenance response.
         </p>
@@ -63,81 +63,74 @@ onMount(() => {
     </section>
 
     <!-- WHY CHOOSE SMART MAINTENANCE -->
-    <section class="px-6 pb-20 pt-0
-    transition-all duration-700"
+    <section
+    class="px-6 pb-20 pt-0 transition-all duration-700"
     class:opacity-0={!show}
     class:translate-y-10={!show}
     class:opacity-100={show}
-    class:translate-y-0={show}>
-        <div class="max-w-5xl mx-auto">
+    class:translate-y-0={show}
+>
+    <div class="max-w-5xl mx-auto">
+        <h3 class="mx-auto text-center font-extrabold leading-tight mb-16">
+            <span class="block text-3xl md:text-4xl">Why Choose</span>
 
-            <!-- Section Heading -->
-            <h3 class="mx-auto max-w-xs sm:max-w-2xl text-center text-3xl md:text-4xl font-extrabold leading-tight mb-16">
-                <span class="block">Why Choose</span>
-                <span class="tumble-text block mt-2">
-                    {#each "Smart School Maintenance".split("") as char, i}
-                        <span
-                            class="tumble-char"
-                            style="animation-delay: {i * 0.12}s"
-                        >
-                            {char === " " ? "\u00A0" : char}
-                        </span>
-                    {/each}
-                </span>
-                <span class="block">?</span>
-            </h3>
+            <span class="block mt-2 text-2xl sm:hidden">
+                Smart School Maintenance
+            </span>
 
-            <!-- VALUE STATS (PLAIN / PROFILE-STYLE) -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center sm:text-left">
+            <span class="tumble-text hidden sm:block text-3xl md:text-4xl">
+                {#each "Smart School Maintenance".split("") as char, i}
+                    <span
+                        class="tumble-char"
+                        style="animation-delay: {i * 0.12}s"
+                    >
+                        {char === " " ? "\u00A0" : char}
+                    </span>
+                {/each}
+            </span>
 
-                <!-- Item 1 -->
-                <div class="flex items-start gap-4">
-                    <div class="text-blue-500">
-                        <ShieldCheck size={32} strokeWidth={2} />
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-lg">
-                            Free Issue Reporting
-                        </h4>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            Report maintenance issues at no cost
-                        </p>
-                    </div>
+            <span class="block text-3xl md:text-4xl">?</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
+            <div class="flex items-start gap-4 text-left">
+                <div class="text-blue-500">
+                    <ShieldCheck size={32} strokeWidth={2} />
                 </div>
-
-                <!-- Item 2 -->
-                <div class="flex items-start gap-4">
-                    <div class="text-blue-500">
-                        <MapPin size={32} strokeWidth={2} />
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-lg">
-                            Auto Location Capture
-                        </h4>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            Automatic GPS tagging for accuracy
-                        </p>
-                    </div>
+                <div>
+                    <h4 class="font-semibold text-lg">Free Issue Reporting</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Report maintenance issues at no cost
+                    </p>
                 </div>
+            </div>
 
-                <!-- Item 3 -->
-                <div class="flex items-start gap-4">
-                    <div class="text-blue-500">
-                        <Zap size={32} strokeWidth={2} />
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-lg">
-                            Faster Response Time
-                        </h4>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            Issues routed instantly to maintenance team
-                        </p>
-                    </div>
+            <div class="flex items-start gap-4 text-left">
+                <div class="text-blue-500">
+                    <MapPin size={32} strokeWidth={2} />
                 </div>
+                <div>
+                    <h4 class="font-semibold text-lg">Auto Location Capture</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Automatic GPS tagging for accuracy
+                    </p>
+                </div>
+            </div>
 
+            <div class="flex items-start gap-4 text-left">
+                <div class="text-blue-500">
+                    <Zap size={32} strokeWidth={2} />
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg">Faster Response Time</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Issues routed instantly to maintenance team
+                    </p>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <div class="my-1 flex justify-center">
