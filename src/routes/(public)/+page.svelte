@@ -98,8 +98,6 @@ onMount(() => {
                     </span>
                     {/each}
                 </span>
-
-                <span class="block">?</span>
             </h3>
             <!-- VALUE STATS (PLAIN / PROFILE-STYLE) -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center sm:text-left">
