@@ -63,7 +63,7 @@ async function handleLogin() {
         >
 
         <!-- HEADER -->
-        <h1 class="text-2xl font-bold text-center">Smart Maintenance</h1>
+        <h1 class="text-2xl font-bold text-center">Smart School Maintenance</h1>
         <p class="text-sm text-center text-slate-600 dark:text-slate-400 mb-6">
             Login to your account
         </p>
