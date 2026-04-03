@@ -55,7 +55,7 @@
 		<!-- Logo -->
 		<a
 			href="/"
-			class="mr-4 flex min-w-0 items-center gap-2 sm:mr-8 transition hover:opacity-90"
+			class="mr-3 flex min-w-0 items-center gap-3 sm:mr-8 transition hover:opacity-90"
 		>
 			<img
 				src={smoolLogo}
@@ -67,6 +67,7 @@
 				<span class="brand-wordmark brand-wordmark-mobile sm:brand-wordmark-desktop">
 					Sm<span class="brand-accent">O</span>ol
 				</span>
+
 				<span class="brand-subtitle hidden sm:block">smart school maintenance</span>
 			</div>
 		</a>
@@ -119,7 +120,7 @@
 		</div>
 
 		<!-- Right Actions -->
-		<div class="flex items-center gap-2 sm:gap-3">
+		<div class="flex shrink-0 items-center gap-2 sm:gap-3">
 			<!-- Desktop Sign Up -->
 			<a
 				href="/signup"
@@ -293,17 +294,8 @@
 	font-family: 'Inter', sans-serif;
 }
 
-.brand-wordmark-mobile {
-	font-size: 1rem;
-}
-
-.brand-wordmark-desktop {
-	font-size: 1.75rem;
-}
-
 .brand-wordmark {
 	font-family: 'Baloo 2', cursive;
-	font-size: 1.75rem;
 	font-weight: 800;
 	letter-spacing: 0.02em;
 	line-height: 0.9;
