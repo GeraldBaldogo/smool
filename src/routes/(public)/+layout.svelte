@@ -55,17 +55,19 @@
 		<!-- Logo -->
 		<a
 			href="/"
-			class="mr-6 flex items-center gap-3 sm:mr-8 transition hover:opacity-90"
+			class="mr-4 flex min-w-0 items-center gap-2 sm:mr-8 transition hover:opacity-90"
 		>
 			<img
 				src={smoolLogo}
 				alt="SmOol logo"
-				class="h-10 w-auto sm:h-12 md:h-12"
+				class="h-9 w-auto shrink-0 sm:h-12 md:h-12"
 			/>
 
-			<div class="hidden sm:flex flex-col leading-none">
-				<span class="brand-wordmark">Sm<span class="brand-accent">O</span>ol</span>
-				<span class="brand-subtitle">smart maintenance</span>
+			<div class="flex min-w-0 flex-col leading-none">
+				<span class="brand-wordmark brand-wordmark-mobile sm:brand-wordmark-desktop">
+					Sm<span class="brand-accent">O</span>ol
+				</span>
+				<span class="brand-subtitle hidden sm:block">smart maintenance</span>
 			</div>
 		</a>
 
@@ -291,6 +293,14 @@
 	font-family: 'Inter', sans-serif;
 }
 
+.brand-wordmark-mobile {
+	font-size: 1rem;
+}
+
+.brand-wordmark-desktop {
+	font-size: 1.75rem;
+}
+
 .brand-wordmark {
 	font-family: 'Baloo 2', cursive;
 	font-size: 1.75rem;
@@ -307,7 +317,8 @@
 .brand-accent {
 	display: inline-block;
 	transform: translateY(-1px) rotate(-6deg);
-	color: transparent;
+	color: #60a5fa;
+	-webkit-text-fill-color: #60a5fa;
 }
 
 .brand-subtitle {
