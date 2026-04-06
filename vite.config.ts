@@ -9,12 +9,13 @@ export default defineConfig({
 			registerType: 'autoUpdate',
 			includeAssets: ['icon-192.png', 'icon-512.png', 'robots.txt'],
 			manifest: {
-				name: 'Smart Maintenance',
-				short_name: 'Maintenance',
+				name: 'Smart School Maintenance',
+				short_name: 'Smool',
 				start_url: '/',
 				display: 'standalone',
 				background_color: '#ffffff',
 				theme_color: '#1d4ed8',
+				lang: 'en',
 				icons: [
 					{
 						src: '/icon-192.png',
