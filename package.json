@@ -33,6 +33,7 @@
     "dotenv": "^17.2.4",
     "lucide-svelte": "^0.575.0",
     "nodemailer": "^8.0.3",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }
