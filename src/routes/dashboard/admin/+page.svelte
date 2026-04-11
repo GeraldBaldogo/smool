@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import Chart from 'chart.js/auto';
 	import { goto } from '$app/navigation';
+	import { FileText, Clock3, CircleX, CircleCheck, Wrench, ClipboardCheck, GraduationCap } from 'lucide-svelte';
 
 	export let data: {
 		user: {
@@ -229,38 +230,87 @@
 
 	<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-7 gap-6">
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">Total Reports</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{total}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">Total Reports</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{total}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300">
+					<FileText class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">Pending</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{pending}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">Pending</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{pending}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-300">
+					<Clock3 class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">Denied</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{denied}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">Denied</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{denied}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-300">
+					<CircleX class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">Approved</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{approved}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">Approved</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{approved}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-300">
+					<CircleCheck class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">In Progress</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{inProgress}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">In Progress</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{inProgress}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-300">
+					<Wrench class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">Completed</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{completed}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">Completed</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{completed}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-cyan-100 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-300">
+					<ClipboardCheck class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur border border-slate-400 dark:border-slate-700 shadow rounded-2xl p-5 sm:p-6">
-			<p class="text-sm text-slate-500">Professor Reports</p>
-			<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{professorReports}</p>
+			<div class="flex items-start justify-between">
+				<div>
+					<p class="text-sm text-slate-500">Professor Reports</p>
+					<p class="text-3xl font-bold text-gray-700 dark:text-gray-200">{professorReports}</p>
+				</div>
+				<div class="p-3 rounded-xl bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-300">
+					<GraduationCap class="w-6 h-6" />
+				</div>
+			</div>
 		</div>
 	</section>
 
