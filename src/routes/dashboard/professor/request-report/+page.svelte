@@ -7,109 +7,15 @@
 	let selectedFile: File | null = null;
 
 	let address = '';
+	let landmark = '';
+	let isSubmitting = false;
+
 	let location: { lat: number | null; lng: number | null } = {
 		lat: null,
 		lng: null
 	};
-	let landmark = '';
 
 	const locationError = writable('');
-
-	function handleFileChange(event: Event) {
-		const target = event.target as HTMLInputElement;
-		if (target.files && target.files.length > 0) {
-			selectedFile = target.files[0];
-		}
-	}
-
-	onMount(() => {
-		if (!navigator.geolocation) {
-			locationError.set('Geolocation not supported');
-			return;
-		}
-
-		navigator.geolocation.getCurrentPosition(
-			(pos) => {
-				location.lat = pos.coords.latitude;
-				location.lng = pos.coords.longitude;
-
-				reverseGeocode(location.lat, location.lng);
-			},
-			(err) => {
-				locationError.set('Could not get location: ' + err.message);
-			}
-		);
-	});
-
-	async function submitRequest() {
-		if (
-			!selectedCategory ||
-			(selectedCategory === 'Others' && !customIssue.trim()) ||
-			(selectedCategory !== 'Others' && !selectedSubcategory) ||
-			!issueDescription ||
-			!selectedFile ||
-			location.lat === null ||
-			location.lng === null
-		) {
-			alert('Please complete all fields.');
-			return;
-		}
-
-		const finalSubcategory =
-			selectedCategory === 'Others' ? customIssue.trim() : selectedSubcategory;
-
-		const formData = new FormData();
-
-		formData.append('category', selectedCategory);
-		formData.append('subcategory', finalSubcategory);
-		formData.append('description', issueDescription);
-		formData.append('photo', selectedFile);
-		formData.append('lat', location.lat.toString());
-		formData.append('lng', location.lng.toString());
-		formData.append('address', address);
-		formData.append('landmark', landmark);
-
-		// professor -> direct agad sa admin
-		formData.append('direct_to_admin', 'true');
-
-		try {
-			const res = await fetch('/api/maintenance-request', {
-				method: 'POST',
-				body: formData
-			});
-
-			if (res.ok) {
-				alert('Request sent directly to Admin!');
-
-				issueDescription = '';
-				selectedFile = null;
-				selectedCategory = '';
-				selectedSubcategory = '';
-				customIssue = '';
-				landmark = '';
-
-				window.location.reload();
-			} else {
-				alert('Failed to send request.');
-			}
-		} catch (error) {
-			console.error(error);
-			alert('Submission failed.');
-		}
-	}
-
-	async function reverseGeocode(lat: number, lng: number) {
-		try {
-			const res = await fetch(
-				`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-			);
-			const data = await res.json();
-
-			address = data.display_name;
-		} catch (e) {
-			address = 'Unable to get address';
-		}
-	}
 
 	const categories = {
 		'Facilities & Infrastructure': [
@@ -133,49 +39,160 @@
 	let selectedCategory: Category | 'Others' | '' = '';
 	let selectedSubcategory = '';
 	let customIssue = '';
+
+	function handleFileChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+
+		if (target.files && target.files.length > 0) {
+			selectedFile = target.files[0];
+		} else {
+			selectedFile = null;
+		}
+	}
+
+	function resetForm() {
+		issueDescription = '';
+		selectedFile = null;
+		selectedCategory = '';
+		selectedSubcategory = '';
+		customIssue = '';
+		landmark = '';
+	}
+
+	onMount(() => {
+		if (!navigator.geolocation) {
+			locationError.set('Geolocation not supported');
+			return;
+		}
+
+		navigator.geolocation.getCurrentPosition(
+			(pos) => {
+				location.lat = pos.coords.latitude;
+				location.lng = pos.coords.longitude;
+
+				reverseGeocode(location.lat, location.lng);
+			},
+			(err) => {
+				locationError.set('Could not get location: ' + err.message);
+			},
+			{
+				enableHighAccuracy: true,
+				timeout: 10000,
+				maximumAge: 0
+			}
+		);
+	});
+
+	async function reverseGeocode(lat: number, lng: number) {
+		try {
+			const res = await fetch(
+				`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+			);
+
+			if (!res.ok) {
+				address = 'Unable to get address';
+				return;
+			}
+
+			const data = await res.json();
+			address = data?.display_name || 'Unable to get address';
+		} catch (e) {
+			address = 'Unable to get address';
+		}
+	}
+
+	async function submitRequest() {
+		if (isSubmitting) return;
+
+		if (
+			!selectedCategory ||
+			(selectedCategory === 'Others' && !customIssue.trim()) ||
+			(selectedCategory !== 'Others' && !selectedSubcategory) ||
+			!issueDescription.trim() ||
+			!selectedFile ||
+			location.lat === null ||
+			location.lng === null
+		) {
+			alert('Please complete all fields.');
+			return;
+		}
+
+		const finalSubcategory =
+			selectedCategory === 'Others' ? customIssue.trim() : selectedSubcategory;
+
+		const formData = new FormData();
+		formData.append('category', selectedCategory);
+		formData.append('subcategory', finalSubcategory);
+		formData.append('description', issueDescription.trim());
+		formData.append('photo', selectedFile);
+		formData.append('lat', location.lat.toString());
+		formData.append('lng', location.lng.toString());
+		formData.append('address', address);
+		formData.append('landmark', landmark.trim());
+
+		// professor report -> diretso agad sa admin
+		formData.append('direct_to_admin', 'true');
+
+		isSubmitting = true;
+
+		try {
+			const res = await fetch('/api/maintenance-request', {
+				method: 'POST',
+				body: formData
+			});
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				console.error('Submit error:', data);
+				alert(data?.error || 'Submission failed.');
+				return;
+			}
+
+			alert(data?.message || 'Request sent directly to Admin!');
+			resetForm();
+			window.location.reload();
+		} catch (error) {
+			console.error('Fetch error:', error);
+			alert('Submission failed. Please try again.');
+		} finally {
+			isSubmitting = false;
+		}
+	}
 </script>
 
 <main
 	class="min-h-screen flex flex-col
-bg-white/5 dark:bg-slate-800/70 backdrop-blur
-border border-slate-400 dark:border-slate-700
-shadow rounded-2xl
-text-slate-800 dark:text-slate-200
-relative z-10 text-[15px]"
+	bg-white/5 dark:bg-slate-800/70 backdrop-blur
+	border border-slate-400 dark:border-slate-700
+	shadow rounded-2xl
+	text-slate-800 dark:text-slate-200
+	relative z-10 text-[15px]"
 >
-	<!-- animated glow background -->
 	<div class="absolute inset-0 -z-10 overflow-hidden rounded-xl">
-		<!-- top glow -->
 		<div
-			class="
-absolute w-[420px] h-[420px] rounded-full blur-3xl animate-float
-left-[-350px] top-[-200px]
-bg-blue-500/35
-dark:bg-blue-400/25
-"
+			class="absolute w-[420px] h-[420px] rounded-full blur-3xl animate-float
+			left-[-350px] top-[-200px]
+			bg-blue-500/35
+			dark:bg-blue-400/25"
 		></div>
 
-		<!-- bottom glow -->
 		<div
-			class="
-absolute w-[350px] h-[380px] rounded-full blur-3xl animate-float2
-right-[-310px] bottom-[-150px]
-bg-cyan-500/40
-dark:bg-cyan-400/25
-"
+			class="absolute w-[350px] h-[380px] rounded-full blur-3xl animate-float2
+			right-[-310px] bottom-[-150px]
+			bg-cyan-500/40
+			dark:bg-cyan-400/25"
 		></div>
 	</div>
 
-	<!-- MAIN CONTENT -->
 	<div
 		class="flex flex-1
-flex-col lg:flex-row
-items-start lg:items-center
-justify-start lg:justify-center
-min-h-[105vh]
-px-6 gap-12"
+		flex-col lg:flex-row
+		items-start lg:items-center
+		justify-start lg:justify-center
+		min-h-[105vh]
+		px-6 gap-12"
 	>
-		<!-- LEFT: SMART MAINTENANCE INFO -->
 		<section class="max-w-lg">
 			<h1 class="text-4xl font-extrabold leading-tight mt-12 md:mt-0 mb-4 text-center lg:text-left">
 				Smart Maintenance Reporting System
@@ -205,7 +222,6 @@ px-6 gap-12"
 			</ul>
 		</section>
 
-		<!-- RIGHT: REPORT FORM -->
 		<section
 			class="w-full max-w-xl
 			bg-white/70 dark:bg-gray-800/70 backdrop-blur
@@ -215,9 +231,8 @@ px-6 gap-12"
 		>
 			<h2 class="text-2xl font-bold mb-6 text-center">Report Maintenance Issue</h2>
 
-			<!-- Category -->
 			<div class="mb-4">
-				<label for="category" class="block mb-1 font-semibold"> Category </label>
+				<label for="category" class="block mb-1 font-semibold">Category</label>
 
 				<select
 					id="category"
@@ -238,7 +253,6 @@ px-6 gap-12"
 				</select>
 			</div>
 
-			<!-- SUBCATEGORIES -->
 			{#if selectedCategory && selectedCategory !== 'Others'}
 				<div class="mb-4">
 					<div class="block mb-1 font-semibold">Specific Issue</div>
@@ -270,9 +284,8 @@ px-6 gap-12"
 				</div>
 			{/if}
 
-			<!-- Issue Description -->
 			<div class="mb-4">
-				<label for="issue" class="block mb-1 font-semibold"> Issue Description </label>
+				<label for="issue" class="block mb-1 font-semibold">Issue Description</label>
 				<textarea
 					id="issue"
 					class="w-full rounded p-2 bg-white dark:bg-gray-900 text-slate-800 dark:text-slate-200 border border-slate-400 dark:border-slate-700"
@@ -282,9 +295,8 @@ px-6 gap-12"
 				></textarea>
 			</div>
 
-			<!-- Photo Upload -->
 			<div class="mb-4">
-				<label for="photo" class="block mb-1 font-semibold"> Upload Photo </label>
+				<label for="photo" class="block mb-1 font-semibold">Upload Photo</label>
 				<input
 					id="photo"
 					type="file"
@@ -299,7 +311,6 @@ px-6 gap-12"
 				{/if}
 			</div>
 
-			<!-- Location -->
 			<div class="mb-6">
 				<p class="block mb-1 font-semibold">Location</p>
 
@@ -335,18 +346,21 @@ px-6 gap-12"
 				{/if}
 			</div>
 
-			<!-- Submit -->
 			<button
-				class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
+				class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 rounded transition"
 				on:click={submitRequest}
+				disabled={isSubmitting}
 			>
-				Submit Request
+				{#if isSubmitting}
+					Submitting...
+				{:else}
+					Submit Request
+				{/if}
 			</button>
 		</section>
 	</div>
 </main>
 
-<!-- FOOTER -->
 <footer
 	class="border-t border-gray-400 dark:border-gray-700 py-8 mt-10 text-sm text-gray-600 dark:text-gray-400"
 >
