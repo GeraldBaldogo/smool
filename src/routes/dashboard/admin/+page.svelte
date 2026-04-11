@@ -161,15 +161,33 @@
 
 		if (categoryChart) categoryChart.destroy();
 
+		const categoryLabels = Object.keys(categoryMap);
+		const categoryValues = Object.values(categoryMap);
+
+		const categoryColors = [
+			'#30a46c', // green
+			'#3b82f6', // blue
+			'#f59e0b', // amber
+			'#ef4444', // red
+			'#8b5cf6', // violet
+			'#06b6d4', // cyan
+			'#ec4899', // pink
+			'#84cc16', // lime
+			'#f97316', // orange
+			'#14b8a6' // teal
+		];
+
 		categoryChart = new Chart(categoryCanvas, {
 			type: 'bar',
 			data: {
-				labels: Object.keys(categoryMap),
+				labels: categoryLabels,
 				datasets: [
 					{
 						label: 'Reports per Category',
-						data: Object.values(categoryMap),
-						backgroundColor: '#30a46c'
+						data: categoryValues,
+						backgroundColor: categoryLabels.map((_, index) => categoryColors[index % categoryColors.length]),
+						borderColor: categoryLabels.map((_, index) => categoryColors[index % categoryColors.length]),
+						borderWidth: 1
 					}
 				]
 			},
